@@ -5,12 +5,12 @@ class Api::UsersController < ApplicationController
   def index
     @users = User.all
 
-    render json: @users
+    show_properties(@users)
   end
 
   # GET /users/1
   def show
-    render json: @user
+    show_properties(@user)
   end
 
   # POST /users
@@ -18,7 +18,7 @@ class Api::UsersController < ApplicationController
     @user = User.new(user_params)
 
     if @user.save
-      render json: @user, status: :created, location: @user
+      render json: @user, status: :created, location: api_user_url(@user)
     else
       render json: @user.errors, status: :unprocessable_entity
     end
@@ -27,7 +27,7 @@ class Api::UsersController < ApplicationController
   # PATCH/PUT /users/1
   def update
     if @user.update(user_params)
-      render json: @user
+      show_properties(@user)
     else
       render json: @user.errors, status: :unprocessable_entity
     end
@@ -39,6 +39,10 @@ class Api::UsersController < ApplicationController
   end
 
   private
+    def show_properties (json)
+      render json: json, except: [:created_at, :updated_at] 
+    end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_user
       @user = User.find(params[:id])
