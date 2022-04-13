@@ -3,7 +3,10 @@ class Api::UsersController < ApplicationController
 
   # GET /users
   def index
-    @users = User.all
+    @users = User
+      .search(params[:name])
+      .older(params[:minage])
+      .younger(params[:maxage])
 
     show_properties(@users)
   end
