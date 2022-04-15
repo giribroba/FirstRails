@@ -1,4 +1,7 @@
 class Api::UsersController < ApplicationController
+  include Admin
+
+  before_action :is_admin, only: %i[ update destroy ]
   before_action :set_user, only: %i[ show update destroy ]
 
   # GET /users
