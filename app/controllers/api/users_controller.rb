@@ -60,7 +60,7 @@ class Api::UsersController < ApplicationController
 
   private
     def show_properties (json)
-      render json: json, except: [:created_at, :updated_at] 
+      render json: json, except: [:created_at, :updated_at, :ip] 
     end
 
     # Use callbacks to share common setup or constraints between actions.

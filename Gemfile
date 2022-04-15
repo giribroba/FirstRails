@@ -47,6 +47,6 @@ group :development do
 end
 
 
-gem "faker", "~> 2.20", :group => :development
+gem "faker", "~> 2.20"
 
 gem "pg", "~> 1.3", :group => :production
