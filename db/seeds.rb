@@ -17,7 +17,7 @@ private
   end
 
 
-  1.times do |i|
+  5.times do |i|
     name = Faker::Games::ElderScrolls.name
 
     User.create!(

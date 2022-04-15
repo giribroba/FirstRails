@@ -49,4 +49,4 @@ end
 
 gem "faker", "~> 2.20", :group => :development
 
-gem "pg", "~> 1.3", :group => :peoduction
+gem "pg", "~> 1.3", :group => :production

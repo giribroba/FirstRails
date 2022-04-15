@@ -1,7 +1,6 @@
 class Api::UsersController < ApplicationController
   include Admin
 
-  before_action :is_admin, only: %i[ update destroy ]
   before_action :set_user, only: %i[ show update destroy ]
 
   # GET /users
@@ -21,27 +20,42 @@ class Api::UsersController < ApplicationController
 
   # POST /users
   def create
-    @user = User.new(user_params)
+    if !User.ip(request.ip).present? || is_admin
+      @user = User.new(user_params)
+      @user.ip = request.ip
 
-    if @user.save
-      render json: @user, status: :created, location: api_user_url(@user)
+      if @user.save
+        render json: @user, except: [:ip], status: :created, location: api_user_url(@user)
+      else
+        render json: @user.errors, status: :unprocessable_entity
+      end
+
     else
-      render json: @user.errors, status: :unprocessable_entity
+      render json: {error: "You've already created a user"}
     end
   end
 
   # PATCH/PUT /users/1
   def update
-    if @user.update(user_params)
-      show_properties(@user)
+    unless is_admin || @user.ip == request.ip
+      render json: {error: "Access denied"}, status: :unauthorized
     else
-      render json: @user.errors, status: :unprocessable_entity
+      if @user.update(user_params)
+        show_properties(@user)
+      else
+        render json: @user.errors, status: :unprocessable_entity
+      end
     end
   end
 
   # DELETE /users/1
   def destroy
-    @user.destroy
+    unless is_admin || @user.ip == request.ip
+      render json: {error: "Access denied"}, status: :unauthorized
+    else
+      render json: {response: "User deleted"}
+      @user.destroy
+    end
   end
 
   private

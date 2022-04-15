@@ -5,4 +5,5 @@ class User < ApplicationRecord
     scope :search, -> (name) { where("name like ?", "%#{name.downcase}%") if name.present? }
     scope :older , -> (minage) { where("age > ?", minage) if minage.present? }
     scope :younger, -> (maxage) { where("age < ?", maxage) if maxage.present? }
+    scope :ip, -> (ip) { where("ip like ?", ip) if ip.present?}
 end
