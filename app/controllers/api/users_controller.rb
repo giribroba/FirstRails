@@ -27,11 +27,11 @@ class Api::UsersController < ApplicationController
       if @user.save
         render json: @user, except: [:ip], status: :created, location: api_user_url(@user)
       else
-        render json: @user.errors, status: :unprocessable_entity
+        render json: @user.errors, status: :unauthorized
       end
 
     else
-      render json: {error: "You've already created a user"}
+      render json: {error: "You've already created a user"}, status: :unauthorized
     end
   end
 
